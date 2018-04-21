@@ -11,7 +11,7 @@ def get_active_rfids():
             the second being another array with each of the 10-digit RFID 
             tags of the active members.
     """
-    return ["Hello, AMT!"]
+    return json.dumps(["Hello, AMT!"])
 
 @app.route("/rfid/<int:tagID>/active")
 def get_rfid_status(tagID):
@@ -20,7 +20,7 @@ def get_rfid_status(tagID):
     :tagID: An RFID id number.
     :returns: True or False
     """
-    return false
+    return json.dumps(False)
 
 @app.route("/rfid/<int:tagID>/certs")
 def get_user_certs(tagID):
@@ -29,7 +29,9 @@ def get_user_certs(tagID):
     :tagID: An RFID id number.
     :returns: JSON response with member status, name, and a list of authorizations
     """
-    return ["helicopter"]
+    certs = []
+    certs.append("helicopter training")
+    return json.dumps(certs)
 
 @app.route("/rfids/authorization", methods=['GET'])
 def get_all_certs():
@@ -37,7 +39,7 @@ def get_all_certs():
     
     :returns: dict
     """
-    return {"certifications": {"user":["Hello, AMT!"]}}
+    return json.dumps({"certifications": {"user":["Hello, AMT!"]}})
 
 @app.route("/rfids/authorization", methods=['POST'])
 def add_cert():
