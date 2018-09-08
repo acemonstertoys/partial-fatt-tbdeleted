@@ -1,5 +1,4 @@
 FROM python:3-alpine
-MAINTAINER Niko Schmuck <niko@nava.de>
 ENV FLASK_APP /usr/src/app/app.py
 
 RUN mkdir -p /usr/src/app
