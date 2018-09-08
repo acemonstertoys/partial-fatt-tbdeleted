@@ -1,22 +1,10 @@
 from flask import Flask, request
 import json
+import sys
 from response import *
 
 
-def create_app(config=None):
-    app = Flask(__name__) 
-    app.config.update(config or {})
-    register_blueprints(app) # store all app code in blueprints.
-    register_other_things(app)
-    return app
-
-class FATTApi(object):
-    def __init__(self, config):
-        self.flask_app = create_app(config)
-        self.flask_app.FATTApiContext = self
-    def __call__(self, environ, start_response):
-        return self.flask_app(environ, start_response)
-        # app.run(host='0.0.0.0', port=int(config['app']['port']), debug=True)
+app = Flask(__name__) 
 
 @app.route("/rfids/active")
 def get_active_rfids():
@@ -82,4 +70,9 @@ def index():
     return "Hello, AMT!"
 
 if __name__ == '__main__':
-    app_instance = FATTApi()
+    config = {'app': {'port': 80}} # sys.argv
+    if len(sys.argv)>1:
+        config['app']['port'] = sys.argv[1]
+    app.run(host='0.0.0.0', port=int(config['app']['port']), debug=True)
+    
+    # app.config.update(config or {})
