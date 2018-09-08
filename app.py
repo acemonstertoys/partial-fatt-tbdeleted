@@ -1,7 +1,22 @@
-from flask import Flask
+from flask import Flask, request
 import json
+from response import *
 
-app = Flask(__name__)
+
+def create_app(config=None):
+    app = Flask(__name__) 
+    app.config.update(config or {})
+    register_blueprints(app) # store all app code in blueprints.
+    register_other_things(app)
+    return app
+
+class FATTApi(object):
+    def __init__(self, config):
+        self.flask_app = create_app(config)
+        self.flask_app.FATTApiContext = self
+    def __call__(self, environ, start_response):
+        return self.flask_app(environ, start_response)
+        # app.run(host='0.0.0.0', port=int(config['app']['port']), debug=True)
 
 @app.route("/rfids/active")
 def get_active_rfids():
@@ -11,7 +26,16 @@ def get_active_rfids():
             the second being another array with each of the 10-digit RFID 
             tags of the active members.
     """
-    return json.dumps(["Hello, AMT!"])
+    rp=None
+    status="BAD"
+    if status is "OK":
+        rfids = []
+        data['rfids'] = r
+        rp=ApiResult(rfids, 200)
+    else:
+        raise ApiException('Oh no its bad')
+    return rp
+#    return json.dumps([status, data])
 
 @app.route("/rfid/<int:tagID>/active")
 def get_rfid_status(tagID):
@@ -58,7 +82,4 @@ def index():
     return "Hello, AMT!"
 
 if __name__ == '__main__':
-    with open("config.json") as f:
-        config = json.load(f)
-    app.run(host='0.0.0.0', port=int(config['app']['port']), debug=True)
-
+    app_instance = FATTApi()
