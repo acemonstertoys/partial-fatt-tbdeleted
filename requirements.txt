@@ -4,3 +4,4 @@ py==1.5.2
 pytest==3.3.2
 six==1.11.0
 flask
+requests

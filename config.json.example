@@ -1,4 +1,5 @@
 {
+    "wp-api-secret":"",
     "app": {
         "port":"8080"
     }
